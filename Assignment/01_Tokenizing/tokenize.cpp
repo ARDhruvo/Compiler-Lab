@@ -7,18 +7,24 @@ int main()
     freopen("output.txt", "w", stdout);
 
     int space = 0, line = 0;
-    bool div = false;
+    bool div = false, mul = false;
     bool lnComment = false, multiComment = false;
 
     for (char c; cin.get(c);)
     {
-        if (!lnComment)
+        if (!lnComment && !multiComment)
         {
             if (div)
             {
                 if (c == '/')
                 {
                     lnComment = true;
+                    div = false;
+                    continue;
+                }
+                else if (c == '*')
+                {
+                    multiComment = true;
                     div = false;
                     continue;
                 }
@@ -68,6 +74,26 @@ int main()
             {
                 lnComment = false;
                 line++;
+            }
+        }
+        if (multiComment)
+        {
+            if (mul)
+            {
+                if (c == '/')
+                {
+                    multiComment = false;
+                    mul = false;
+                    continue;
+                }
+                else
+                {
+                    mul = false;
+                }
+            }
+            if (c == '*')
+            {
+                mul = true;
             }
         }
     }
