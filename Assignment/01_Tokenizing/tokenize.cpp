@@ -6,7 +6,7 @@ int main()
     freopen("input.c", "r", stdin);
     freopen("output.txt", "w", stdout);
 
-    int space = 0;
+    int space = 0, line = 0;
     char divide;
     bool lnComment = false, multiComment = false;
 
@@ -15,15 +15,23 @@ int main()
         if (c == ' ')
         {
             space++;
+            line = 0;
         }
         else
         {
             space = 0;
+            line = 0;
         }
 
         if (space < 2)
         {
-            cout << c;
+            if (c == '\n' && line < 2)
+            {
+                cout << ' ';
+                line++;
+            }
+            else
+                cout << c;
         }
     }
     fclose(stdin);
