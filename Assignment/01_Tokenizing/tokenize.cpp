@@ -7,31 +7,68 @@ int main()
     freopen("output.txt", "w", stdout);
 
     int space = 0, line = 0;
-    char divide;
+    bool div = false;
     bool lnComment = false, multiComment = false;
 
     for (char c; cin.get(c);)
     {
-        if (c == ' ')
+        if (!lnComment)
         {
-            space++;
-            line = 0;
-        }
-        else
-        {
-            space = 0;
-            line = 0;
-        }
-
-        if (space < 2)
-        {
-            if (c == '\n' && line < 2)
+            if (div)
             {
-                cout << ' ';
+                if (c == '/')
+                {
+                    lnComment = true;
+                    div = false;
+                    continue;
+                }
+                else
+                {
+                    cout << '/';
+                    div = false;
+                }
+            }
+
+            if (c == ' ')
+            {
+                space++;
+            }
+            else if (c == '\n')
+            {
                 line++;
+                space = 0;
+            }
+            else if (c == '/')
+            {
+                div = true;
             }
             else
-                cout << c;
+            {
+                space = 0;
+                line = 0;
+            }
+
+            if (!div)
+            {
+                if (space < 2 && line < 2)
+                {
+                    if (c == '\n')
+                    {
+                        cout << ' ';
+                        line++;
+                    }
+                    else
+                        cout << c;
+                }
+            }
+        }
+        if (lnComment)
+        {
+            if (c == '\n')
+            {
+                lnComment = false;
+                line++;
+            }
         }
     }
     fclose(stdin);
