@@ -3,14 +3,23 @@ using namespace std;
 
 int main()
 {
-    freopen("input.c", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    cout << "Sample Input: input.c" << endl;
+    ifstream inputFile("input.c");
+    string line;
+    while (getline(inputFile, line))
+    {
+        cout << line << endl;
+    }
+    inputFile.close();
 
-    int space = 0, line = 0;
+    ifstream inFile("input.c");
+    ofstream outFile("output.txt");
+
+    int space = 0, newLine = 0;
     bool div = false, mul = false;
     bool lnComment = false, multiComment = false;
 
-    for (char c; cin.get(c);)
+    for (char c; inFile.get(c);)
     {
         if (!lnComment && !multiComment)
         {
@@ -30,7 +39,7 @@ int main()
                 }
                 else
                 {
-                    cout << '/';
+                    outFile << '/';
                     div = false;
                 }
             }
@@ -41,7 +50,7 @@ int main()
             }
             else if (c == '\n')
             {
-                line++;
+                newLine++;
                 space = 0;
             }
             else if (c == '/')
@@ -51,20 +60,20 @@ int main()
             else
             {
                 space = 0;
-                line = 0;
+                newLine = 0;
             }
 
             if (!div)
             {
-                if (space < 2 && line < 2)
+                if (space < 2 && newLine < 2)
                 {
                     if (c == '\n')
                     {
-                        cout << ' ';
-                        line++;
+                        outFile << ' ';
+                        newLine++;
                     }
                     else
-                        cout << c;
+                        outFile << c;
                 }
             }
         }
@@ -73,7 +82,7 @@ int main()
             if (c == '\n')
             {
                 lnComment = false;
-                line++;
+                newLine++;
             }
         }
         if (multiComment)
@@ -97,7 +106,16 @@ int main()
             }
         }
     }
-    fclose(stdin);
-    fclose(stdout);
+    inFile.close();
+    outFile.close();
+
+    // Displaying the output file content
+
+    cout << "Sample Output: ";
+    ifstream out("output.txt");
+    for (char c; out.get(c);)
+    {
+        cout << c;
+    }
     return 0;
 }
