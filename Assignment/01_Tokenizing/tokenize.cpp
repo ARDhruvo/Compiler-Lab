@@ -1,19 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main()
+#define paragraph cout << endl
+
+void printFile(string filename)
 {
-    cout << "Sample Input: input.c" << endl;
-    ifstream inputFile("input.c");
+    ifstream inputFile(filename);
+    if (!inputFile.is_open())
+    {
+        cout << "Error opening file: " << filename << endl;
+        return;
+    }
+
     string line;
     while (getline(inputFile, line))
     {
         cout << line << endl;
     }
     inputFile.close();
+}
 
+void tokenize()
+{
     ifstream inFile("input.c");
+    if (!inFile.is_open())
+    {
+        cout << "Error opening input file." << endl;
+        return;
+    }
     ofstream outFile("output.txt");
+    if (!outFile.is_open())
+    {
+        cout << "Error opening output file." << endl;
+        return;
+    }
 
     int space = 0, newLine = 0;
     bool div = false, mul = false;
@@ -108,14 +128,17 @@ int main()
     }
     inFile.close();
     outFile.close();
+}
 
-    // Displaying the output file content
+int main()
+{
+    cout << "Sample Input: input.c" << endl;
+    printFile("input.c");
+    paragraph;
+
+    tokenize();
 
     cout << "Sample Output: ";
-    ifstream out("output.txt");
-    for (char c; out.get(c);)
-    {
-        cout << c;
-    }
+    printFile("output.txt");
     return 0;
 }
