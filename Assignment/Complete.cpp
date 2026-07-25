@@ -20,6 +20,128 @@ void printFile(string filename)
     inputFile.close();
 }
 
+void tokenize()
+{
+    ifstream inFile("input.c");
+    if (!inFile.is_open())
+    {
+        cout << "Error opening input file." << endl;
+        return;
+    }
+    ofstream outFile("output.txt");
+    if (!outFile.is_open())
+    {
+        cout << "Error opening output file." << endl;
+        return;
+    }
+
+    int space = 0, newLine = 0;
+    bool div = false, mul = false;
+    bool lnComment = false, multiComment = false;
+
+    for (char c; inFile.get(c);)
+    {
+        if (!lnComment && !multiComment)
+        {
+            if (div)
+            {
+                if (c == '/')
+                {
+                    lnComment = true;
+                    div = false;
+                    continue;
+                }
+                else if (c == '*')
+                {
+                    multiComment = true;
+                    div = false;
+                    continue;
+                }
+                else
+                {
+                    outFile << '/';
+                    div = false;
+                }
+            }
+
+            if (c == ' ')
+            {
+                space++;
+            }
+            else if (c == '\n')
+            {
+                newLine++;
+                space = 0;
+            }
+            else if (c == '/')
+            {
+                div = true;
+            }
+            else
+            {
+                space = 0;
+                newLine = 0;
+            }
+
+            if (!div)
+            {
+                if (space < 2 && newLine < 2)
+                {
+                    if (c == '\n')
+                    {
+                        outFile << ' ';
+                        newLine++;
+                    }
+                    else
+                        outFile << c;
+                }
+            }
+        }
+        if (lnComment)
+        {
+            if (c == '\n')
+            {
+                lnComment = false;
+                newLine++;
+            }
+        }
+        if (multiComment)
+        {
+            if (mul)
+            {
+                if (c == '/')
+                {
+                    multiComment = false;
+                    mul = false;
+                    continue;
+                }
+                else
+                {
+                    mul = false;
+                }
+            }
+            if (c == '*')
+            {
+                mul = true;
+            }
+        }
+    }
+    inFile.close();
+    outFile.close();
+}
+
+void tokenizer()
+{
+    cout << "Sample Input: input.c" << endl;
+    printFile("input.c");
+    paragraph;
+
+    tokenize();
+
+    cout << "Sample Output: ";
+    printFile("output.txt");
+}
+
 void spaceChecker(char c, ofstream &outFile, bool &space)
 {
     if (space)
@@ -402,13 +524,22 @@ void identifier()
 
 int main()
 {
+    cout << "Original File:" << endl;
+    printFile("input.c");
+    paragraph;
+
+    tokenize();
+    cout << "Tokenized and without space:" << endl;
+    printFile("output.txt");
+    paragraph;
+
     lexemeSeparator();
-    cout << "Step 1:" << endl;
+    cout << "Separated Lexemes:" << endl;
     printFile("step1.txt");
     paragraph;
 
     identifier();
-    cout << "Step 2:" << endl;
+    cout << "Tagged Lexemes:" << endl;
     printFile("step2.txt");
 
     return 0;
