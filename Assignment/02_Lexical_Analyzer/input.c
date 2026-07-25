@@ -1,22 +1,11 @@
-#include <stdio.h>
-
-int     main(void)
-{
-// Single Line Comment
-    printf ("Hello") ;int a = 5;
-    for(int i =0; i <=2; i++)
-    {
-        if(a==5)
-    {
-        printf("a is neither <= nor >= 5!"   )  ;
-        a = a+1;
-    }    else
-        a=a*9 / 5       ;
-    }
-    /* Multi
-    Line
-                Comment
-    */ if (a != 10)
-    printf("World");
-    return 0;
-}
+char c;
+int x1, x_2;
+float y1, y2;
+x1 = 5;
+x_2 = 10;
+y1 = 2.5 + x1 * 45;
+y2 = 100.o5 - x_2 / 3;
+if (y1 <= y2)
+    c = 'y';
+else
+    c = 'n';

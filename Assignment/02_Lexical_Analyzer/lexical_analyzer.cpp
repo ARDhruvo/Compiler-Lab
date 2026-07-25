@@ -348,6 +348,180 @@ void lexemeSeparator()
     outFile.close();
 }
 
+bool isKeyword(string lex)
+{
+    set<string> keywords = {
+        "int", "char", "float", "double", "void", "long", "short",
+        "signed", "unsigned", "if", "else", "for", "while", "do",
+        "switch", "case", "default", "break", "continue", "return",
+        "struct", "union", "typedef", "enum", "const", "static",
+        "extern", "register", "volatile", "sizeof", "goto"};
+    if (keywords.find(lex) != keywords.end())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool isOperator(string lex)
+{
+    set<string> ops = {
+        "=", "+", "-", "*", "/", "%",
+        "==", "!=", "<=", ">=", "<", ">",
+        "&&", "||", "!", "&", "|", "++", "--"};
+    if (ops.find(lex) != ops.end())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+int id_rec(string lex)
+{
+    int state = 0;
+    if (isalpha(lex[0]) || lex[0] == '_')
+        state = 1;
+    else
+        return 0;
+
+    for (size_t i = 1; i < lex.size(); i++)
+    {
+        if (isalnum(lex[i]) || lex[i] == '_')
+            state = 1;
+        else
+        {
+            state = 0;
+            break;
+        }
+    }
+    return state;
+}
+
+int num_rec(string lex)
+{
+    int i = 0, len = lex.size(), state;
+
+    if (isdigit(lex[i]))
+    {
+        state = 1;
+        i++;
+    }
+    else if (lex[i] == '.')
+    {
+        state = 2;
+        i++;
+    }
+    else
+        state = 0;
+
+    if (state == 1)
+        for (; i < len; i++)
+        {
+            if (isdigit(lex[i]))
+                state = 1;
+            else if (lex[i] == '.')
+            {
+                state = 2;
+                i++;
+                break;
+            }
+            else
+            {
+                state = 0;
+                break;
+            }
+        }
+
+    if (state == 2)
+    {
+        if (i < len && isdigit(lex[i]))
+        {
+            state = 3;
+            i++;
+        }
+        else
+            state = 0;
+    }
+
+    if (state == 3)
+        for (; i < len; i++)
+        {
+            if (isdigit(lex[i]))
+                state = 3;
+            else
+            {
+                state = 0;
+                break;
+            }
+        }
+
+    if (state == 3)
+        state = 1;
+    return state;
+}
+
+bool isSeparator(string lex)
+{
+    return lex == ";" || lex == "," || lex == "'" || lex == "\"";
+}
+
+bool isParen(string lex)
+{
+    return lex == "(" || lex == ")";
+}
+
+bool isBrace(string lex)
+{
+    return lex == "{" || lex == "}" || lex == "[" || lex == "]";
+}
+
+string tagger(string lex)
+{
+    if (isKeyword(lex))
+        return "kw";
+    if (id_rec(lex))
+        return "id";
+    if (num_rec(lex))
+        return "num";
+    if (isOperator(lex))
+        return "op";
+    if (isSeparator(lex))
+        return "sep";
+    if (isParen(lex))
+        return "par";
+    if (isBrace(lex))
+        return "brac";
+    return "unkn";
+}
+
+void identifier()
+{
+    // Step 2: Tokenize and classify the identifiers and keywords into their respective categories
+    ifstream inFile("step1.txt");
+    if (!inFile.is_open())
+    {
+        cout << "Error opening step1.txt." << endl;
+        exit(1);
+    }
+    ofstream outFile("step2.txt");
+
+    string lex;
+    while (inFile >> lex)
+    {
+        string tag = tagger(lex);
+        outFile << "[" << tag << " " << lex << "] ";
+    }
+
+    inFile.close();
+    outFile.close();
+}
+
 int main()
 {
     tokenize();
@@ -357,7 +531,9 @@ int main()
     printFile("step1.txt");
     paragraph;
 
-    // Step 2: Tokenize and classify the identifiers and keywords into their respective categories
+    identifier();
+    cout << "Step 2:" << endl;
+    printFile("step2.txt");
 
     return 0;
 }
