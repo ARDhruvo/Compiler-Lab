@@ -185,64 +185,32 @@ int main()
             else
             {
                 inc = true;
-                if (space)
-                {
-                    outFile << c;
-                    space = false;
-                }
-                else
-                {
-                    outFile << ' ' << c;
-                }
+                spaceChecker(c, outFile, space);
             }
             break;
         case '-':
             if (dec)
             {
                 outFile << c;
-                dec = false;
+                inc = false;
             }
             else
             {
                 dec = true;
-                if (space)
-                {
-                    outFile << c;
-                    space = false;
-                }
-                else
-                {
-                    outFile << ' ' << c;
-                }
+                spaceChecker(c, outFile, space);
             }
             break;
         case '*':
         case '/':
             op = true;
-            if (space)
-            {
-                outFile << c;
-                space = false;
-            }
-            else
-            {
-                outFile << ' ' << c;
-            }
+            spaceChecker(c, outFile, space);
             break;
         case '(':
         case ')':
         case '{':
         case '}':
             brac = true;
-            if (space)
-            {
-                outFile << c;
-                space = false;
-            }
-            else
-            {
-                outFile << ' ' << c;
-            }
+            spaceChecker(c, outFile, space);
             break;
         case '\'':
         case '\"':
@@ -252,15 +220,7 @@ int main()
 
         case ';':
             sep = true;
-            if (space)
-            {
-                outFile << c;
-                space = false;
-            }
-            else
-            {
-                outFile << ' ' << c;
-            }
+            spaceChecker(c, outFile, space);
             break;
         case ' ':
             if (sep)
@@ -302,6 +262,16 @@ int main()
             {
                 outFile << ' ';
                 op = false;
+            }
+            else if (inc)
+            {
+                outFile << ' ';
+                inc = false;
+            }
+            else if (dec)
+            {
+                outFile << ' ';
+                dec = false;
             }
             outFile << c;
             space = false;
