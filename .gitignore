@@ -2,3 +2,5 @@
 Assignment/01_Tokenizing/input
 *.o
 Assignment/01_Tokenizing/tokenize
+Assignment/02_Lexical_Analyzer/lexical_analyzer
+Assignment/02_Lexical_Analyzer/input

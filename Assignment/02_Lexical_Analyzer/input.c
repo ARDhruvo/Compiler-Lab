@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+int     main(void)
+{
+// Single Line Comment
+    printf ("Hello") ;int a = 5;
+    for(int i =0; i <=2; i++)
+    {
+        if(a==5)
+    {
+        printf("a is neither <= nor >= 5"   )  ;
+        a = a+1;
+    }    else
+        a=a*9 / 5       ;
+    }
+    /* Multi
+    Line
+                Comment
+    */
+    printf("World");
+    return 0;
+}
