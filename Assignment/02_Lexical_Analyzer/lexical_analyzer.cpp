@@ -155,15 +155,9 @@ void spaceChecker(char c, ofstream &outFile, bool &space)
     }
 }
 
-int main()
+void lexemeSeparator()
 {
-    tokenize();
-
     // Step 1: Separate the identifiers and keywords from the output.txt file
-
-    cout << "Main file:" << endl;
-    printFile("output.txt");
-    paragraph;
 
     ifstream inFile("output.txt");
     if (!inFile.is_open())
@@ -352,8 +346,16 @@ int main()
 
     inFile.close();
     outFile.close();
+}
 
+int main()
+{
+    tokenize();
+
+    lexemeSeparator();
+    cout << "Step 1:" << endl;
     printFile("step1.txt");
+    paragraph;
 
     // Step 2: Tokenize and classify the identifiers and keywords into their respective categories
 
