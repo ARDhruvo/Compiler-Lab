@@ -161,6 +161,10 @@ int main()
 
     // Step 1: Separate the identifiers and keywords from the output.txt file
 
+    cout << "Main file:" << endl;
+    printFile("output.txt");
+    paragraph;
+
     ifstream inFile("output.txt");
     if (!inFile.is_open())
     {
@@ -171,11 +175,57 @@ int main()
     ofstream outFile("step1.txt");
 
     bool space = false, sep = false, quote = false, brac = false;
-    bool op = false, inc = false, dec = false;
+    bool op = false, inc = false, dec = false, comp = false;
+    bool notOp = false, andOp = false, orOp = false;
+
     for (char c; inFile.get(c);)
     {
         switch (c)
         {
+        case '&':
+            if (andOp)
+            {
+                outFile << c;
+                andOp = false;
+            }
+            else
+            {
+                andOp = true;
+                spaceChecker(c, outFile, space);
+            }
+            break;
+        case '|':
+            if (orOp)
+            {
+                outFile << c;
+                orOp = false;
+            }
+            else
+            {
+                orOp = true;
+                spaceChecker(c, outFile, space);
+            }
+            break;
+        case '!':
+            notOp = true;
+            spaceChecker(c, outFile, space);
+            break;
+        case '<':
+        case '>':
+        case '=':
+            if (op || notOp)
+            {
+                outFile << c;
+                op = false;
+                notOp = false;
+                comp = true;
+            }
+            else
+            {
+                op = true;
+                spaceChecker(c, outFile, space);
+            }
+            break;
         case '+':
             if (inc)
             {
@@ -192,7 +242,7 @@ int main()
             if (dec)
             {
                 outFile << c;
-                inc = false;
+                dec = false;
             }
             else
             {
@@ -202,6 +252,7 @@ int main()
             break;
         case '*':
         case '/':
+        case '%':
             op = true;
             spaceChecker(c, outFile, space);
             break;
@@ -219,26 +270,19 @@ int main()
             break;
 
         case ';':
+        case ',':
             sep = true;
             spaceChecker(c, outFile, space);
             break;
         case ' ':
-            if (sep)
-            {
-                sep = false;
-            }
-            if (quote)
-            {
-                quote = false;
-            }
-            if (brac)
-            {
-                brac = false;
-            }
-            if (op)
-            {
-                op = false;
-            }
+            sep = false;
+            quote = false;
+            brac = false;
+            op = false;
+            comp = false;
+            notOp = false;
+            andOp = false;
+            orOp = false;
             space = true;
             outFile << c;
             break;
@@ -248,7 +292,7 @@ int main()
                 outFile << ' ';
                 sep = false;
             }
-            if (quote)
+            else if (quote)
             {
                 outFile << ' ';
                 quote = false;
@@ -273,11 +317,35 @@ int main()
                 outFile << ' ';
                 dec = false;
             }
+            else if (comp)
+            {
+                outFile << ' ';
+                dec = false;
+            }
+            else if (notOp)
+            {
+                outFile << ' ';
+                notOp = false;
+            }
+            else if (andOp)
+            {
+                outFile << ' ';
+                andOp = false;
+            }
+            else if (orOp)
+            {
+                outFile << ' ';
+                orOp = false;
+            }
             outFile << c;
             space = false;
             brac = false;
             inc = false;
             dec = false;
+            comp = false;
+            notOp = false;
+            andOp = false;
+            orOp = false;
             break;
         }
     }

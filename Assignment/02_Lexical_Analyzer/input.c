@@ -8,7 +8,7 @@ int     main(void)
     {
         if(a==5)
     {
-        printf("a is neither <= nor >= 5"   )  ;
+        printf("a is neither <= nor >= 5!"   )  ;
         a = a+1;
     }    else
         a=a*9 / 5       ;
@@ -16,7 +16,7 @@ int     main(void)
     /* Multi
     Line
                 Comment
-    */
+    */ if (a != 10)
     printf("World");
     return 0;
 }
